@@ -4,7 +4,9 @@ import Login from "./component/login/Login";
 import Footer from "./component/footer/Footer";
 import HomePage from "./component/HomePage/HomePage";
 import Register from "./component/login/Register";
+import axios from "axios";
 
+axios.defaults.baseURL = 'http://localhost:5173'
 export default function App() {
   return (
     <div className="p-4 flex flex-col min-h-screen">
