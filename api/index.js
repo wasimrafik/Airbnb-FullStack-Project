@@ -9,7 +9,10 @@ import  userRouter from './Router/UserRouter';
 const app = express();
 
 const bcryptSalt = bcrypt.genSaltSync(10)
-
+const PORT = process.env.PORT || 4000;
+app.listen(PORT, () => {
+    console.log("PORT is connected at" + PORT);
+  });
 
 app.use(express.json())
 app.use(cors({
@@ -26,16 +29,3 @@ app.get('/test', (req,res)=>{
 })
 
 app.use('/user', userRouter);
-
-
-// app.post('/login', async (req,res)=>{
-//     const {email, password}= req.body;
-//     const userDoc = await userModel.findOne({email:email});
-//     if(userDoc){
-//         res.json('found')
-//     }else{
-//         res.json('not Fount')
-//     }
-// })
-app.listen(4000)
-

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import axios, {  } from 'axios';
+import axios from 'axios';
 const Register = () => {
 
   const [name, setName] = useState('');
@@ -12,12 +12,12 @@ const Register = () => {
   async function  registerUser(e) {
     e.preventDefault();
    try {
-    await axios.post("/user/register",{
+    await axios.post("/user/addUser",{
       name,
       email,
       password,
     });
-    alert("Registeration Sucessfully, Now you can login")  
+    alert("Registeration Sucessfully, Now you can login")
    } catch (error) {
     alert("Registation Failed!!!!!!!")
    }

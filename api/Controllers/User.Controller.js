@@ -8,7 +8,7 @@ export const addUser = async (req,res) =>{
         const createNewUser = new userModel({
             name,
             email,
-            password
+            password,
         })
         
         await createNewUser.save();
@@ -22,13 +22,16 @@ export const addUser = async (req,res) =>{
 }
 
 export const getUser = async (req, res) =>{
-
-    const getUser = userModel.find();
+    try {
+        const getUser = await userModel.find();
 
     if(getUser){
         return res.status(200).json({
             Data: getUser,
             Message: "User Data Fetch Sucessfully"
         })
+    }
+    } catch (error) {
+        return res.status(500).json({Message: error.Message})
     }
 }
