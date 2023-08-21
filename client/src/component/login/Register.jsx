@@ -2,17 +2,26 @@
 
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import axios, { AxiosHeaders } from 'axios';
+import axios, {  } from 'axios';
 const Register = () => {
 
   const [name, setName] = useState('');
   const [email, setemail] = useState('');
   const [password, setpassword] = useState('');
 
-  function  registerUser(e) {
+  async function  registerUser(e) {
     e.preventDefault();
-    axios.get("/test", { headers: AxiosHeaders })
-    {AxiosHeaders}
+   try {
+    await axios.post("/register",{
+      name,
+      email,
+      password,
+    });
+   } catch (error) {
+    alert("Registation Failed!!!!!!!")
+   }
+
+   alert("Registeration Sucessfully, Now you can login")   
 
   }
 
