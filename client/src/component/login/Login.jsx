@@ -2,20 +2,28 @@
 
 import axios from "axios"
 import { useState } from "react"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 
 const Login = () => {
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-
+  const navigate = useNavigate()
   async function handleLoginSubmit(e){
     e.preventDefault();
     try {
-      axios.post('/login', {email,password})
-      alert("Login Sucessfull")
+      await axios.post("/user/login", {email,password});
+      if(email === ''){
+        alert("Enter your email")
+      }else if(password === ''){
+        alert("Enter your password")
+      }else{
+        alert("Login Sucessfull")
+        navigate('/')
+      }
     } catch (error) {
       alert("Login failed !!!!")
+      console.log("Login Failed");
     }
     
   

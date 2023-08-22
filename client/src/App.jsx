@@ -5,13 +5,16 @@ import Footer from "./component/footer/Footer";
 import HomePage from "./component/HomePage/HomePage";
 import Register from "./component/login/Register";
 import axios from "axios";
+import { UserContextProvider } from "./component/userContext/UserContext";
 
 axios.defaults.baseURL = "http://localhost:4000";
 
 export default function App() {
   return (
     <div className="p-4 flex flex-col min-h-screen">
+    
     <Router>
+       <UserContextProvider>
           <Header />
       <Routes>
         <Route path="/" element={<HomePage />}/>
@@ -19,6 +22,7 @@ export default function App() {
         <Route path="/register" element={<Register />}/>
       </Routes>  
       <Footer />
+      </UserContextProvider>
     </Router>
     </div>
   )

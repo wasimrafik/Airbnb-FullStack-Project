@@ -24,8 +24,4 @@ mongoose
   .connect("mongodb://127.0.0.1:27017/Airbnb")
   .then(() => console.log("DB is COnnected "));
 
-app.get('/test', (req,res)=>{
-    res.json('test ok')
-})
-
 app.use('/user', userRouter);
