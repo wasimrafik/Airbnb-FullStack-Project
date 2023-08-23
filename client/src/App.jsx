@@ -8,6 +8,7 @@ import axios from "axios";
 import { UserContextProvider } from "./component/userContext/UserContext";
 
 axios.defaults.baseURL = "http://localhost:4000";
+axios.defaults.withCredentials = true;
 
 export default function App() {
   return (

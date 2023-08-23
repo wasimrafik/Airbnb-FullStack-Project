@@ -1,4 +1,5 @@
 import userModel from '../Models/userModel'
+import jwt from "jsonwebtoken";
 // import bcrypt from 'bcrypt'
 
 export const addUser = async (req,res) =>{
@@ -44,10 +45,31 @@ export const getUser = async (req, res) =>{
             Message: "Please Check Your Email Address"
         })
     }
-
-    return res.status(200).json({
+    const token = jwt.sign(
+        {
+        id: getUser._id,
+        email: getUser.email,
+        },
+        "secrectKey",
+        {
+            expiresIn: "1h",
+        }
+    );
+    
+    return res.cookie("secrectKey",token).json({
         Data: getUser,
+        token: token,
         Message: "LogIn Sucessfull"
+    })
+    } catch (error) {
+        return res.status(500).json({Message: error.Message})
+    }
+}
+
+export const getUserProfile = async (req, res) =>{
+    try {
+    return res.status(200).json({
+        Message: "User Profile"
     })
     } catch (error) {
         return res.status(500).json({Message: error.Message})
