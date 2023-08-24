@@ -49,6 +49,7 @@ export const getUser = async (req, res) =>{
         {
         id: getUser._id,
         email: getUser.email,
+        name: getUser.name,
         },
         "secrectKey",
         {
@@ -68,9 +69,11 @@ export const getUser = async (req, res) =>{
 
 export const getUserProfile = async (req, res) =>{
     try {
-    return res.status(200).json({
-        Message: "User Profile"
-    })
+        const {token} = req.cookies;
+        console.log('Cookies: ', req.cookies)
+        return res.json({token});
+        
+        
     } catch (error) {
         return res.status(500).json({Message: error.Message})
     }

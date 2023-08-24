@@ -20,16 +20,17 @@ const Login = () => {
       const userInfo = await axios.post("/user/login", { email, password });
         setUser(userInfo); // Corrected this line
         alert("Login Successful");
+        navigate('/')
         setRedirect(true)
       
     } catch (error) {
       alert("Login failed !!!!");
       console.log("Login Failed");
     }
-    if(redirect){
-      navigate('/');
-    }
-  
+  }
+
+  if(!redirect){
+    // return null; 
   }
   return (
     <div className="mt-4 grow flex items-center justify-around">
