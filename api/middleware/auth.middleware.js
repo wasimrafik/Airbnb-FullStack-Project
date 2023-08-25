@@ -2,15 +2,16 @@ import jwt from 'jsonwebtoken';
 
 const auth = async (req, res, next) =>{
     try {
-        if (req.headers.authorization) {
-          const token = req.headers.authorization;
+      console.log(req.cookies.secrectKey);
+        if (req.cookies.secrectKey) {
+          const token = req.cookies.secrectKey;
+
           console.log("Received Token:", token);
           const decodedToken = jwt.verify(token, "secrectKey");
     
           if (decodedToken) {
-            console.log("Decoded Token:", decodedToken);
-            // Attach decoded user data to res.locals
-            res.locals.user = decodedToken;
+            console.log("Decoded Token auth:", decodedToken);
+            req.auth = decodedToken;
             next();
           } else {
             return res.status(500).json({

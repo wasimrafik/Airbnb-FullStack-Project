@@ -15,7 +15,6 @@ export const addUser = async (req,res) =>{
             })
         }
         
-         
         const createNewUser = new userModel({
             name,
             email,
@@ -69,10 +68,12 @@ export const getUser = async (req, res) =>{
 
 export const getUserProfile = async (req, res) =>{
     try {
-        const {token} = req.cookies;
-        console.log('Cookies: ', req.cookies)
-        return res.json({token});
-        
+
+        console.log(req.auth);
+
+         const {email, name, _id} = await userModel.findById(req.auth.id);
+
+          return res.json({email, name, _id})
         
     } catch (error) {
         return res.status(500).json({Message: error.Message})

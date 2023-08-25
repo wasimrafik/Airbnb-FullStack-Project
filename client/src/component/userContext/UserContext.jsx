@@ -7,14 +7,10 @@ export const UserContextProvider = ({ children }) => {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    const config = {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    };
+
 
     if (!user) {
-      axios.get('/user/profile', config)
+      axios.get('/user/profile')
         .then(response => {
           setUser(response.data.user);
         })
