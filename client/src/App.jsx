@@ -22,7 +22,8 @@ export default function App() {
         <Route path="/" element={<HomePage />}/>
         <Route path="/login" element={<Login />}/>
         <Route path="/register" element={<Register />}/>
-        <Route path="/account" element={<Account />}/>
+        <Route path="/account/:subPage?" element={<Account />}/>
+        
       </Routes>  
       <Footer />
       </UserContextProvider>

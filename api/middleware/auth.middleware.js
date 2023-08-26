@@ -6,11 +6,11 @@ const auth = async (req, res, next) =>{
         if (req.cookies.secrectKey) {
           const token = req.cookies.secrectKey;
 
-          console.log("Received Token:", token);
+          // console.log("Received Token:", token);
           const decodedToken = jwt.verify(token, "secrectKey");
     
           if (decodedToken) {
-            console.log("Decoded Token auth:", decodedToken);
+            // console.log("Decoded Token auth:", decodedToken);
             req.auth = decodedToken;
             next();
           } else {

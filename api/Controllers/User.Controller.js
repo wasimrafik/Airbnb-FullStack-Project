@@ -76,6 +76,16 @@ export const getUserProfile = async (req, res) =>{
           return res.json({email, name, _id})
         
     } catch (error) {
-        return res.status(500).json({Message: error.Message})
+        return res.status(500).json({Message: error.Message})   
     }
 }
+
+export const logout = async (req, res) =>{
+    try {
+        console.log(req.cookie);
+         res.cookie('secrectKey', '').json(true);
+    } catch (error) {
+        return res.status(500).json({Message: error.Message})   
+    }
+}
+

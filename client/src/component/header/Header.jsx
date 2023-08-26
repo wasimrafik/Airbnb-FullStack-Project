@@ -52,7 +52,7 @@ const Header = () => {
             {
               !!user && (
                 <div>
-                  {user.data.Data.name}
+                  {user.name}
                 
                 </div>
               )
