@@ -30,7 +30,7 @@ const Login = () => {
   }
 
   if(!redirect){
-    return null; 
+    // return null; 
   }
   return (
     <div className="mt-4 grow flex items-center justify-around">

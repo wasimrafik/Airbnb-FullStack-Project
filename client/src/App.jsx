@@ -23,6 +23,7 @@ export default function App() {
         <Route path="/login" element={<Login />}/>
         <Route path="/register" element={<Register />}/>
         <Route path="/account/:subPage?" element={<Account />}/>
+        <Route path="/account/:subPage/:action" element={<Account />}/>
         
       </Routes>  
       <Footer />
