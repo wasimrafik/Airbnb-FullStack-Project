@@ -3,12 +3,12 @@ import  { addUser, getUser, getUserProfile, logout } from'../Controllers/User.Co
 import auth from '../middleware/auth.middleware'; 
 
 
-const Router = express.Router();
+const userRouter = express.Router();
 
 
-Router.post('/register', addUser)
-Router.post('/login', getUser)
-Router.get('/profile', auth, getUserProfile)
-Router.post('/logout', logout)
+userRouter.post('/register', addUser)
+userRouter.post('/login', getUser)
+userRouter.get('/profile', auth, getUserProfile)
+userRouter.post('/logout', logout)
 
-export default Router;
+export default userRouter;

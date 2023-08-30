@@ -4,12 +4,14 @@ const  mongoose = require('mongoose');
 const bcrypt = require("bcrypt");
 import cookieParser from 'cookie-parser'
 import  userRouter from './Router/UserRouter';
+import placeRouter from './Router/placeRouter';
 
 
 
 const app = express();
 app.use(express.json());
 app.use(cookieParser());
+app.use(express.static(__dirname));
 
 const bcryptSalt = bcrypt.genSaltSync(10)
 const PORT = process.env.PORT || 4000;
@@ -28,3 +30,4 @@ mongoose
   .then(() => console.log("DB is COnnected "));
 
 app.use('/user', userRouter);
+app.use('/place', placeRouter);
