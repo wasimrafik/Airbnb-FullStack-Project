@@ -3,7 +3,7 @@ import { addPlaces, deletePlaces, getAllPlaces, updatePlaces } from '../Controll
 
 const placeRouter = express.Router();
 
-placeRouter.post('/newPlace', addPlaces )
+placeRouter.post('/addNewPlace', addPlaces )
 // placeRouter.post('/newPlace', updatePlaces )
 // placeRouter.post('/newPlace', getAllPlaces )
 // placeRouter.post('/newPlace', deletePlaces )

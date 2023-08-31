@@ -7,15 +7,14 @@ const places = new Schema({
     owner:{
         type: Schema.Types.ObjectId,
         ref: userModel,
-        required: true
     },
     title:{
         type: String,
-        required: true
+        // required: true
     },
     location:{
         type: String,
-        required: true
+        // required: true
     },
     photos:{
         type: [String],
@@ -23,7 +22,7 @@ const places = new Schema({
     },
     description:{
         type: String,
-        required: true
+        // required: true
     },
     perks:{
         type: [String],
@@ -35,15 +34,15 @@ const places = new Schema({
     },
     checkIn:{
         type: Number,
-        required: true
+        // required: true
     },
     checkOut:{
         type: Number,
-        required: true
+        // required: true
     },
     maxGuests:{
         type: Number,
-        required: true
+        // required: true
     },
 })
 

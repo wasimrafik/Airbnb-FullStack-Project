@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Link, useParams } from "react-router-dom"
 import Perks from "./Perks";
+import axios from 'axios'
 
 const Places = () => {
 
@@ -11,8 +12,8 @@ const Places = () => {
     
     const [title, setTitle] = useState('');
     const [address, setAddress] = useState('');
-    const [existingPhotos, setExistingPhotos] = useState([]);
-    const [photoLink, setPhotoLink] = useState('');
+    const [existingPhotos, setExistingPhotos] = useState('');
+    const [photoLink, setPhotoLink] = useState([]);
     const [description, setDescription] = useState('');
     const [perks, setPerks] = useState([]);
     const [extraInfo, setExtraInfo] = useState('');
@@ -41,10 +42,38 @@ const Places = () => {
       )
     }
 
-    function addPhotoByLink(){
-      
+    const uploadImages = (e)=> {
+      const selectedFiles = e.target.files;
+      // console.log(selectedFiles);
+      const selectedFilesArray = Array.from(selectedFiles)
+
+      const imageArray = selectedFilesArray.map((file) =>{
+        return URL.createObjectURL(file)
+      })
+      setExistingPhotos(imageArray)
+    }
+    async function addPhotoByLink(e){
+      e.preventDefault();
+      let addImageToDB = existingPhotos;
+      console.log(addImageToDB);
+      let imageData = new FormData()
+      for(let i=0; i < addImageToDB.length; i++){
+        imageData.append('photoLink',photoLink);
+      }
+      console.log(imageData);
+      // console.log(photoLink);
+      axios.post('/place/addNewPlace', imageData,
+      {headers: {"Content-Type":"multipart/form-data"}}
+      )
+      .then(res => {
+      const {data} = res;
+      })
+      .catch(err=> {console.log(err)})
+
     }
 
+    // console.log(existingPhotos);
+    
   return (
     <>
     { action !== 'new' && (
@@ -71,20 +100,24 @@ const Places = () => {
               {preInput('Photos','More = better')} 
 
               <div className="flex gap-2">
-                <input type="text" value={photoLink} onChange={(e) => setPhotoLink(e.target.value)} placeholder="Add Using a Link ...jpg"/>
-                <button className="bg-gray-200 px-4 rounded-2xl">Add&nbsp;Photos</button>
+              
+                <input type="file" value={photoLink} onChange={uploadImages} placeholder="Add Using a Link ...jpg" multiple/>
+                <button className="bg-gray-200 px-4 rounded-2xl" onClick={addPhotoByLink}>Add&nbsp;Photos</button>
               </div>
 
-              <div className="mt-3 grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
-
+            {/* Image Preview and Delete */}
+              <div className="my-4  grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6">
+                {existingPhotos && existingPhotos.map((img)=>{
+                    return (
+                      <div className="ml-3 text-center felx m-auto" key={img}>
+                        <button className="p-2 px-4 mb-1 mt-4 rounded-2xl" onClick={()=> setExistingPhotos(existingPhotos.filter((e) => e !== img))}>Delete</button>
+                        <img className='rounded-2xl' src={img} alt="Image" width="150" height="100"/>
+                        
+                      </div>
+                    )
+                })}
               </div>
-              <button className="flex justify-center gap-1 border bg-transparent rounded-2xl p-8 text-2xl font-bold text-gray-600">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-8 h-8">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M12 16.5V9.75m0 0l3 3m-3-3l-3 3M6.75 19.5a4.5 4.5 0 01-1.41-8.775 5.25 5.25 0 0110.233-2.33 3 3 0 013.758 3.848A3.752 3.752 0 0118 19.5H6.75z" />
-              </svg>
 
-                Uploads
-              </button> 
               {preInput('Description','Description of the place')}
 
               <textarea value={description} onChange={(e) => setDescription(e.target.value)}/>
