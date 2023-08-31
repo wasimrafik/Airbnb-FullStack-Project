@@ -54,21 +54,21 @@ const Places = () => {
     }
     async function addPhotoByLink(e){
       e.preventDefault();
-      let addImageToDB = existingPhotos;
-      console.log(addImageToDB);
-      let imageData = new FormData()
-      for(let i=0; i < addImageToDB.length; i++){
-        imageData.append('photoLink',photoLink);
-      }
-      console.log(imageData);
-      // console.log(photoLink);
-      axios.post('/place/addNewPlace', imageData,
-      {headers: {"Content-Type":"multipart/form-data"}}
-      )
-      .then(res => {
-      const {data} = res;
-      })
-      .catch(err=> {console.log(err)})
+      // let addImageToDB = existingPhotos;
+      // console.log(addImageToDB);
+      // let imageData = new FormData()
+      // for(let i=0; i < addImageToDB.length; i++){
+      //   imageData.append('photoLink',photoLink);
+      // }
+      // console.log(imageData);
+      // // console.log(photoLink);
+      // axios.post('/place/addNewPlace', imageData,
+      // {headers: {"Content-Type":"multipart/form-data"}}
+      // )
+      // .then(res => {
+      // const {data} = res;
+      // })
+      // .catch(err=> {console.log(err)})
 
     }
 
