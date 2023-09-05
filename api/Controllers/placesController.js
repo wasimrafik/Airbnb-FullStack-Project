@@ -2,6 +2,7 @@ import placeModle from '../Models/placeModle';
 import multer from 'multer'
 import path from 'path'
 import fs from 'fs'
+import userModel from '../Models/userModel';
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -33,74 +34,87 @@ const storage = multer.diskStorage({
 
 const upload = multer({storage});
 
-export const addPlaces = async (req, res)=>{
+export const addPlace = async (req, res) => {
     try {
-        // const {imageLink} = req.body;
-        const uploadImage = upload.array('photos',10)
-
-        uploadImage(req,res, async function (err) {
-            if(err){
-                return res.status(501).json({Message: err.Message})
-            }
-
-            // const {
-            //     title,
-            //     location,
-            //     description,
-            //     checkIn,
-            //     checkOut,
-            //     maxGuests,
-            //   } = req.body;
-        
-
+      const ownerID = req.auth.id;
+  
+      const uploadImage = upload.array('photos', 10);
+  
+      uploadImage(req, res, async function (err) {
+        if (err) {
+          return res.status(501).json({ Message: err.message });
+        }
+        console.log(ownerID);
+        console.log(req.files);
+        const {
+          title,
+          location,
+          description,
+          checkIn,
+          checkOut,
+          maxGuests,
+        } = req.body;
+  
+        // Use req.files to access uploaded files
         let photos = [];
-        // console.log(req.files)
-
-        if(req.files){
-            req.files.forEach((file) =>{
-                photos.push(file.filename)
-            })
+  
+        if (req.files) {
+          req.files.forEach((file) => {
+            photos.push(file.filename);
+          });
         }
-
-        // console.log("Files:", req.files);
-        // console.log(photos);
-
+  
         const addNewPlaces = new placeModle({
-            // title: title,
-            // location: location,
-            // description: description,
-            photos: photos.join(','),
-            // checkIn: checkIn,
-            // checkOut: checkOut,
-            // maxGuests: maxGuests,
-        })
-
-        const validationError = addNewPlaces.validateSync();
-      if (validationError) {
-        return res.status(400).json({ message: validationError.message });
-      }
-
-        await addNewPlaces.save();
-        if(addNewPlaces){
-            return res.status(200).json({
-                Data: addNewPlaces,
-                Message: "New Places added Sucessfully"
-            })
+          photos: photos.join(','), // Join the array of photo filenames into a comma-separated string
+        });
+  
+        const addNewPlace = new placeModle({
+          owner: ownerID,
+          title,
+          location,
+          description,
+          checkIn,
+          checkOut,
+          maxGuests,
+          photos, // Add the photos array to the place document
+        });
+  
+        const validationError = addNewPlace.validateSync();
+        if (validationError) {
+          return res.status(400).json({ message: validationError.message });
         }
-        })
+  
+        await addNewPlace.save();
+  
+        if (addNewPlace) {
+          return res.status(200).json({
+            Data: addNewPlace,
+            Message: 'New Place added Successfully',
+          });
+        }
+      });
     } catch (error) {
-        return res.status(500).json({
-            Message: error.Message
-        })
+      return res.status(500).json({
+        Message: error.message,
+      });
     }
-}
+  };
+  
+  
 
 export const getAllPlaces = async (req, res)=>{
     try {
+        const userID = req.auth.id;
+        // console.log(userID);
         
+        const getAllPlaces = await placeModle.find({ owner: userID });
+
+        console.log(getAllPlaces);
+        return res.json({Data: getAllPlaces, Message:"All Places Fetch Sucessfully"})
+
     } catch (error) {
         return res.status(500).json({
-            Message: error.Message
+            Message: error.Message  
         })
     }
 }

@@ -6,7 +6,9 @@ import HomePage from "./component/HomePage/HomePage";
 import Register from "./component/login/Register";
 import axios from "axios";
 import { UserContextProvider } from "./component/userContext/UserContext";
-import Account from "./component/HomePage/user/Account";
+import ProfilePage from "./component/HomePage/user/ProfilePage";
+import Places from "./component/HomePage/places/Places";
+import PlacesFormPage from "./component/HomePage/places/PlacesFormPage";
 
 axios.defaults.baseURL = "http://localhost:4000";
 axios.defaults.withCredentials = true;
@@ -22,9 +24,10 @@ export default function App() {
         <Route path="/" element={<HomePage />}/>
         <Route path="/login" element={<Login />}/>
         <Route path="/register" element={<Register />}/>
-        <Route path="/account/:subPage?" element={<Account />}/>
-        <Route path="/account/:subPage/:action" element={<Account />}/>
-        
+        <Route path="/account" element={<ProfilePage />}/>
+        <Route path="/account/places" element={<Places  />}/>
+        <Route path="/account/places/new" element={<PlacesFormPage />}/>
+        <Route path="/account/places/:id" element={<PlacesFormPage />}/>
       </Routes>  
       <Footer />
       </UserContextProvider>

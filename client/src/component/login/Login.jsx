@@ -20,8 +20,9 @@ const Login = () => {
       const userInfo = await axios.post("/user/login", { email, password });
         setUser(userInfo); // Corrected this line
         alert("Login Successful");
-        navigate('/')
         setRedirect(true)
+        navigate('/')
+        
       
     } catch (error) {
       alert("Login failed !!!!");

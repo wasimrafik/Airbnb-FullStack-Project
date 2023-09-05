@@ -2,7 +2,7 @@ import jwt from 'jsonwebtoken';
 
 const auth = async (req, res, next) =>{
     try {
-      console.log(req.cookies.secrectKey);
+      // console.log(req.cookies.secrectKey);
         if (req.cookies.secrectKey) {
           const token = req.cookies.secrectKey;
 

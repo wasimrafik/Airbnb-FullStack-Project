@@ -69,7 +69,7 @@ export const getUser = async (req, res) =>{
 export const getUserProfile = async (req, res) =>{
     try {
 
-        console.log(req.auth);
+        // console.log(req.auth);
 
          const {email, name, _id} = await userModel.findById(req.auth.id);
 
