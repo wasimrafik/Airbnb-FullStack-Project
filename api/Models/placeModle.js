@@ -10,9 +10,13 @@ const places = new Schema({
     },
     title:{
         type: String,
-        // required: true
+        required: true
     },
     location:{
+        type: String,
+        required: true
+    },
+    address:{
         type: String,
         // required: true
     },
@@ -22,7 +26,7 @@ const places = new Schema({
     },
     description:{
         type: String,
-        // required: true
+        required: true
     },
     perks:{
         type: [String],
@@ -34,15 +38,15 @@ const places = new Schema({
     },
     checkIn:{
         type: Number,
-        // required: true
+        required: true
     },
     checkOut:{
         type: Number,
-        // required: true
+        required: true
     },
     maxGuests:{
         type: Number,
-        // required: true
+        required: true
     },
 })
 

@@ -44,15 +44,18 @@ export const addPlace = async (req, res) => {
         if (err) {
           return res.status(501).json({ Message: err.message });
         }
-        console.log(ownerID);
-        console.log(req.files);
+        // console.log(ownerID);
+        // console.log(req.files);
         const {
           title,
           location,
           description,
+          address,
           checkIn,
+          extraInfo,
           checkOut,
           maxGuests,
+          perks,
         } = req.body;
   
         // Use req.files to access uploaded files
@@ -72,10 +75,13 @@ export const addPlace = async (req, res) => {
           owner: ownerID,
           title,
           location,
+          address,
           description,
           checkIn,
           checkOut,
+          extraInfo,
           maxGuests,
+          perks: perks.split(','),
           photos, // Add the photos array to the place document
         });
   
@@ -117,6 +123,23 @@ export const getAllPlaces = async (req, res)=>{
             Message: error.Message  
         })
     }
+}
+
+export const getSingleUser = async (req, res)=>{
+  try {
+
+    const userID = req.params.id;
+    
+    const getSingleUser = await placeModle.findById(userID)
+    if(getSingleUser){
+      return res.status(200).json({Data: getSingleUser, Message: "Single User Fetch Sucessfully"})
+    }
+      
+  } catch (error) {
+      return res.status(500).json({
+          Message: error.Message
+      })
+  }
 }
 
 export const updatePlaces = async (req, res)=>{

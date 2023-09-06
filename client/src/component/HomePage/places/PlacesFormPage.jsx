@@ -1,13 +1,13 @@
-import { useEffect, useState } from 'react';
+import {  useState,useEffect } from 'react';
 import Perks from './Perks';
 import axios from 'axios';
 import AccountNav from './AccountNav';
-import { useParams } from 'react-router-dom';
+import { Navigate, useParams } from 'react-router-dom';
 
 const PlacesFormPage = () => {
 
   const {id} = useParams();
-  console.log(id);
+  // console.log(id);
   const [title, setTitle] = useState('');
   const [address, setAddress] = useState('');
   const [existingPhotos, setExistingPhotos] = useState([]);
@@ -17,14 +17,31 @@ const PlacesFormPage = () => {
   const [checkIn, setCheckInTime] = useState('');
   const [checkOut, setCheckOutTime] = useState('');
   const [maxGuests, setMaxGuests] = useState(1);
-  const [redirect, setRedirect] = useState(false);
-
-  useEffect(()=>{
-    if(!id){
+  const [redirect, setRedirect] = useState(false)
+  // console.log(id);
+  useEffect(() => {
+    if (!id) {
       return;
     }
-    axios.get('/places/'+id)
-  },[id])
+  
+    axios.get('/place/places/' + id)
+      .then(res => {
+        // console.log(res.data.Data);
+        const data  = res.data.Data;
+        setTitle(data.title);
+        setAddress(data.address);
+        setExistingPhotos(data.existingPhotos);
+        setDescription(data.description);
+        setExtraInfo(data.extraInfo);
+        setPerks(data.perks);
+        setCheckInTime(data.checkIn);
+        setCheckOutTime(data.checkOut);
+        setMaxGuests(data.maxGuests);
+      })
+      .catch(error => {
+        console.error("Error fetching data:", error);
+      });
+  }, [id]);
 
 
   function inputHeader(label) {
@@ -44,49 +61,85 @@ const PlacesFormPage = () => {
     );
   }
 
-  const addNewPlace = async (e) => {
+  const savePlace = async (e) => {
     e.preventDefault();
-    const formData = new FormData();
+    if(id){
+      const formData = new FormData();
     formData.append('title', title);
-    formData.append('location', address);
+    formData.append('address', address);
+    formData.append('location', location);
     formData.append('description', description);
+    formData.append('extraInfo', extraInfo);
     formData.append('checkIn', checkIn);
     formData.append('checkOut', checkOut);
     formData.append('maxGuests', maxGuests);
+    formData.append('perks', perks.join(','));
 
-    // Append each selected file to the formData
     Array.from(existingPhotos).forEach((file) => {
       formData.append('photos', file);
     });
 
-    console.log(existingPhotos);
+    // console.log(existingPhotos);
 
     try {
-      const response = await axios.post('/place/addNewPlace', formData, {
+      await axios.put('/place/update', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
       });
-
-      console.log(formData);
-      console.log(response.data);
-      // Handle redirection or other actions upon successful submission
+      setRedirect(true) 
+      // console.log(formData);
+      // console.log(response.data);
     } catch (error) {
       console.error(error);
     }
+    }else{
+      const formData = new FormData();
+    formData.append('title', title);
+    formData.append('address', address);
+    formData.append('location', location);
+    formData.append('description', description);
+    formData.append('extraInfo', extraInfo);
+    formData.append('checkIn', checkIn);
+    formData.append('checkOut', checkOut);
+    formData.append('maxGuests', maxGuests);
+    formData.append('perks', perks.join(','));
+
+    Array.from(existingPhotos).forEach((file) => {
+      formData.append('photos', file);
+    });
+
+    // console.log(existingPhotos);
+
+    try {
+      await axios.post('/place/addNewPlace', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      setRedirect(true) 
+      // console.log(formData);
+      // console.log(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+    }
+    
   };
 
- 
+ if(redirect){
+    return <Navigate to={'/account/places'}/>
+ }
 
   return (
     <div>
       <AccountNav />
-      <form onSubmit={addNewPlace}>
+      <form onSubmit={savePlace}>
         {preInput('Title', 'Title for your place should be short and catchy as in advertisement')}
         <input
           type="text"
           name="title"
-          value={title}
+          value={title || ''}
           onChange={(e) => setTitle(e.target.value)}
           placeholder="Title, ex:- My Lovely Apt"
         />
@@ -95,7 +148,7 @@ const PlacesFormPage = () => {
         <input
           type="text"
           name="address"
-          value={address}
+          value={address || ''}
           onChange={(e) => setAddress(e.target.value)}
           placeholder="Address"
         />
@@ -107,7 +160,7 @@ const PlacesFormPage = () => {
             onChange={(e) => {
               // Convert FileList to an array
               const filesArray = Array.from(e.target.files);
-              console.log(filesArray);
+              // console.log(filesArray);
               setExistingPhotos(filesArray);
             }}
             multiple
@@ -115,15 +168,15 @@ const PlacesFormPage = () => {
         </div>
 
         {preInput('Description', 'Description of the place')}
-        <textarea value={description} onChange={(e) => setDescription(e.target.value)} />
+        <textarea value={description || ''} onChange={(e) => setDescription(e.target.value)} />
 
         {preInput('Perks', 'Select all the perks for your places')}
         <div className="grid gap-2 grid-cols-2 md:grid-cols-3 lg:grid-cols-6">
-          <Perks selected={perks} onChange={setPerks} />
+          <Perks selected={perks || ''} onChange={setPerks} />
         </div>
 
         {preInput('Extra info', 'House rules, etc')}
-        <textarea value={extraInfo} onChange={(e) => setExtraInfo(e.target.value)} />
+        <textarea value={extraInfo || ''} onChange={(e) => setExtraInfo(e.target.value)} />
 
         {preInput('Check-In & Check-Out Time', 'Add check-in and check-out time')}
         <div className="grid gap-2 sm:grid-cols-3">
@@ -131,7 +184,7 @@ const PlacesFormPage = () => {
             <h3 className="mt-2 -mb-2">Check-in time</h3>
             <input
               type="number"
-              value={checkIn}
+              value={checkIn || ''}
               onChange={(e) => setCheckInTime(e.target.value)}
               placeholder="14:00"
             />
@@ -140,7 +193,7 @@ const PlacesFormPage = () => {
             <h3 className="mt-2 -mb-2">Check-out time</h3>
             <input
               type="number"
-              value={checkOut}
+              value={checkOut || ''}
               onChange={(e) => setCheckOutTime(e.target.value)}
               placeholder="11:00"
             />
@@ -149,7 +202,7 @@ const PlacesFormPage = () => {
             <h3 className="mt-2 -mb-2">Max no. Guests</h3>
             <input
               type="number"
-              value={maxGuests}
+              value={maxGuests || ''}
               onChange={(e) => setMaxGuests(e.target.value)}
               placeholder="No. of guests"
             />

@@ -3,13 +3,13 @@ import { Link, useLocation } from 'react-router-dom'
 
 const AccountNav = () => {
     const {pathname} = useLocation()
-    console.log(location);
+    // console.log(location);
     let subpage = pathname.split('/')?.[2];
 
     if(subpage === undefined){
         subpage = 'profile';
     }
-    console.log({subpage});
+    // console.log({subpage});
     function activeLinkClass (type=null) {
 
         let classes = 'py-2 px-6 inline-flex  bg-primary rounded-full text-white gap-1';
