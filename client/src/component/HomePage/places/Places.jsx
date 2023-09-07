@@ -30,17 +30,17 @@ const Places = () => {
         Add New Place</Link>
         </div>
 
-        <div>
+        <div className="">
         {
           places.length > 0 && places.map(place => (
           <Link
           key={place._id} // Add a unique key using place._id
           to={'/account/places/' + place._id}
-          className="flex gap-4 cursor-pointer rounded-2xl bg-gray-200 p-4 rounded-2xl"
+          className="flex gap-4 cursor-pointer mb-3 mt-3 bg-gray-200 p-4 rounded-2xl"
           >
-          <div className="w-32 h-32 bg-gray-300 grow shrink-0">
+          <div className="flex w-32 h-32 bg-gray-300 grow shrink-0">
           {place.photos.length > 0 && (
-          <img src={place.photos[0]} alt="photos" />
+          <img className="object-cover w-32" src={'http://localhost:4000/Uploads/places/'+place.photos[0]} alt="photos" />
           )}
           </div>
           <div className="grow-0 shrink">

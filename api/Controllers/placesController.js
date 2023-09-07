@@ -53,6 +53,7 @@ export const addPlace = async (req, res) => {
           address,
           checkIn,
           extraInfo,
+          price,
           checkOut,
           maxGuests,
           perks,
@@ -79,6 +80,7 @@ export const addPlace = async (req, res) => {
           description,
           checkIn,
           checkOut,
+          price,
           extraInfo,
           maxGuests,
           perks: perks.split(','),
@@ -142,15 +144,77 @@ export const getSingleUser = async (req, res)=>{
   }
 }
 
-export const updatePlaces = async (req, res)=>{
-    try {
-        
-    } catch (error) {
-        return res.status(500).json({
-            Message: error.Message
-        })
-    }
-}
+
+export const updatePlaces = async (req, res) => {
+  try {
+    const ownerID = req.auth.id;
+    const uploadImage = upload.array('photos', 10);
+
+    uploadImage(req, res, async function (err) {
+      if (err) {
+        return res.status(501).json({ Message: err.message });
+      }
+
+      const id = req.params.id;
+      const findUser = await placeModle.findOne({ _id: ownerID });
+
+      const {
+        title,
+        location,
+        description,
+        address,
+        checkIn,
+        extraInfo,
+        checkOut,
+        price,
+        maxGuests,
+        perks,
+      } = req.body;
+
+      let photos = [];
+
+      if (req.files !== undefined) {
+        req.files.forEach((file) => {
+          photos.push(file.filename);
+        })};
+
+        // Delete old images
+        if (findUser && findUser.photos) {
+          const oldImagePath = './uploads/places/' + findUser.photos;
+          if (fs.existsSync(oldImagePath)) {
+            fs.unlinkSync(oldImagePath);
+          }
+        }
+
+      // Update the document in the database
+      const updateFields = {
+        title,
+        location,
+        description,
+        address,
+        checkIn,
+        extraInfo,
+        checkOut,
+        price,
+        maxGuests,
+        perks,
+        photos, // Assign the array of filenames to the photos field
+      };
+
+      console.log(updateFields);
+      const updatePlaces = await placeModle.updateOne({ _id: id }, { $set: updateFields });
+      console.log(updatePlaces);
+      if (updatePlaces.acknowledged) {
+        return res.status(201).json({ Data: updatePlaces, Message: "Places updated successfully" });
+      }
+    });
+  } catch (error) {
+    return res.status(505).json({
+      Message: error.message,
+    });
+  }
+};
+
 
 export const deletePlaces = async (req, res)=>{
     try {
@@ -160,4 +224,19 @@ export const deletePlaces = async (req, res)=>{
             Message: error.Message
         })
     }
+}
+
+export const getAllPlacesForHomePage = async (req, res)=>{
+  try {
+      
+      const getAllPlaces = await placeModle.find();
+
+      console.log(getAllPlaces);
+      return res.json({Data: getAllPlaces, Message:"All Places Fetch For Home Sucessfully"})
+
+  } catch (error) {
+      return res.status(500).json({
+          Message: error.Message  
+      })
+  }
 }

@@ -1,13 +1,15 @@
 import express from 'express';
 import auth from '../middleware/auth.middleware'
-import { addPlace, addPlacesPhotos, deletePlaces, getAllPlaces, getSingleUser, updatePlaces } from '../Controllers/placesController';
+import { addPlace, getAllPlaces, getAllPlacesForHomePage, getSingleUser, updatePlaces } from '../Controllers/placesController';
 
 const placeRouter = express.Router();
 
 placeRouter.post('/addNewPlace', auth, addPlace )
 placeRouter.get('/places', auth, getAllPlaces )
 placeRouter.get('/places/:id', getSingleUser )
-// placeRouter.post('/newPlace', updatePlaces )
+placeRouter.put('/updatePlaces/:id', auth, updatePlaces )
+placeRouter.get('/getAllPlacesForHomePage', getAllPlacesForHomePage )
+
 
 // placeRouter.post('/newPlace', deletePlaces )
  

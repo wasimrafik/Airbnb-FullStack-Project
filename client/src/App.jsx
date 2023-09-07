@@ -9,13 +9,14 @@ import { UserContextProvider } from "./component/userContext/UserContext";
 import ProfilePage from "./component/HomePage/user/ProfilePage";
 import Places from "./component/HomePage/places/Places";
 import PlacesFormPage from "./component/HomePage/places/PlacesFormPage";
+import PlaceDetailPage from "./component/HomePage/places/PlaceDetailPage";
 
 axios.defaults.baseURL = "http://localhost:4000";
 axios.defaults.withCredentials = true;
 
 export default function App() {
   return (
-    <div className="p-4 flex flex-col min-h-screen">
+    <div className="p-4 px-8 flex flex-col min-h-screen">
     
     <Router>
        <UserContextProvider>
@@ -28,6 +29,7 @@ export default function App() {
         <Route path="/account/places" element={<Places  />}/>
         <Route path="/account/places/new" element={<PlacesFormPage />}/>
         <Route path="/account/places/:id" element={<PlacesFormPage />}/>
+        <Route path="/place/:id" element={<PlaceDetailPage />}/>
       </Routes>  
       <Footer />
       </UserContextProvider>

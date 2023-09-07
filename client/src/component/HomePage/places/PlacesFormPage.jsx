@@ -12,8 +12,10 @@ const PlacesFormPage = () => {
   const [address, setAddress] = useState('');
   const [existingPhotos, setExistingPhotos] = useState([]);
   const [description, setDescription] = useState('');
+  const [location, setLocation] = useState('');
   const [perks, setPerks] = useState([]);
   const [extraInfo, setExtraInfo] = useState('');
+  const [price, setPrice] = useState('');
   const [checkIn, setCheckInTime] = useState('');
   const [checkOut, setCheckOutTime] = useState('');
   const [maxGuests, setMaxGuests] = useState(1);
@@ -30,10 +32,12 @@ const PlacesFormPage = () => {
         const data  = res.data.Data;
         setTitle(data.title);
         setAddress(data.address);
+        setLocation(data.location);
         setExistingPhotos(data.existingPhotos);
         setDescription(data.description);
+        setPrice(data.price);
         setExtraInfo(data.extraInfo);
-        setPerks(data.perks);
+        setPerks(data.perks); 
         setCheckInTime(data.checkIn);
         setCheckOutTime(data.checkOut);
         setMaxGuests(data.maxGuests);
@@ -64,32 +68,34 @@ const PlacesFormPage = () => {
   const savePlace = async (e) => {
     e.preventDefault();
     if(id){
-      const formData = new FormData();
-    formData.append('title', title);
-    formData.append('address', address);
-    formData.append('location', location);
-    formData.append('description', description);
-    formData.append('extraInfo', extraInfo);
-    formData.append('checkIn', checkIn);
-    formData.append('checkOut', checkOut);
-    formData.append('maxGuests', maxGuests);
-    formData.append('perks', perks.join(','));
+      const UpdateFormData = new FormData();
+      UpdateFormData.append('title', title);
+      UpdateFormData.append('address', address);
+      UpdateFormData.append('location', location);
+      UpdateFormData.append('extraInfo', extraInfo);
+      UpdateFormData.append('checkIn', checkIn);
+      UpdateFormData.append('description', description);
+      UpdateFormData.append('checkOut', checkOut);
+      UpdateFormData.append('price', price);
+      UpdateFormData.append('maxGuests', maxGuests);
+      UpdateFormData.append('perks', perks.join(','));
 
-    Array.from(existingPhotos).forEach((file) => {
-      formData.append('photos', file);
-    });
+    if(existingPhotos !== undefined){
+      Array.from(existingPhotos).forEach((file) => {
+        UpdateFormData.append('photos', file);
+      });
+    }
 
-    // console.log(existingPhotos);
+    
 
     try {
-      await axios.put('/place/update', formData, {
+      await axios.put('/place/updatePlaces/' + id, UpdateFormData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
       });
       setRedirect(true) 
-      // console.log(formData);
-      // console.log(response.data);
+      console.log(UpdateFormData);
     } catch (error) {
       console.error(error);
     }
@@ -102,6 +108,7 @@ const PlacesFormPage = () => {
     formData.append('extraInfo', extraInfo);
     formData.append('checkIn', checkIn);
     formData.append('checkOut', checkOut);
+    formData.append('price', price);
     formData.append('maxGuests', maxGuests);
     formData.append('perks', perks.join(','));
 
@@ -153,6 +160,15 @@ const PlacesFormPage = () => {
           placeholder="Address"
         />
 
+        {preInput('Location', 'Please enter a city Name')}
+        <input
+          type="text"
+          name="location"
+          value={location || ''}
+          onChange={(e) => setLocation(e.target.value)}
+          placeholder="Address"
+        />
+
         {preInput('Photos', 'More = better')}
         <div className="flex gap-2">
           <input
@@ -166,6 +182,36 @@ const PlacesFormPage = () => {
             multiple
           />
         </div>
+          
+        {
+          <div className="my-4 grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6">
+            {existingPhotos &&
+            existingPhotos.map((img, index) => {
+            return (
+            <div className="ml-3 text-center object-cover w-150 h-150 felx m-auto" key={index}>
+            <button
+              className="p-2 px-4 mb-1 mt-4 rounded-2xl"
+              onClick={() =>
+                setExistingPhotos(existingPhotos.filter((e, i) => i !== index))
+              }
+            >
+              Delete
+             </button>
+              <img
+              key={index} // Use a unique key, such as index
+              className="rounded-2xl w-150 h-150"
+              src={URL.createObjectURL(img)}
+              alt="photos"
+              width="150"
+              height="100"
+            />
+            </div>
+             );
+            })}
+    
+          </div>
+        }
+
 
         {preInput('Description', 'Description of the place')}
         <textarea value={description || ''} onChange={(e) => setDescription(e.target.value)} />
@@ -179,9 +225,9 @@ const PlacesFormPage = () => {
         <textarea value={extraInfo || ''} onChange={(e) => setExtraInfo(e.target.value)} />
 
         {preInput('Check-In & Check-Out Time', 'Add check-in and check-out time')}
-        <div className="grid gap-2 sm:grid-cols-3">
+        <div className="grid gap-2 sm:grid-cols-2 md:grid-cols-4">
           <div>
-            <h3 className="mt-2 -mb-2">Check-in time</h3>
+            <h3 className="mt-2 -mb-1 ml-3">Check-in time</h3>
             <input
               type="number"
               value={checkIn || ''}
@@ -190,7 +236,7 @@ const PlacesFormPage = () => {
             />
           </div>
           <div>
-            <h3 className="mt-2 -mb-2">Check-out time</h3>
+            <h3 className="mt-2 -mb-1 ml-3">Check-out time</h3>
             <input
               type="number"
               value={checkOut || ''}
@@ -199,13 +245,25 @@ const PlacesFormPage = () => {
             />
           </div>
           <div>
-            <h3 className="mt-2 -mb-2">Max no. Guests</h3>
+            <h3 className="mt-2 -mb-1 ml-3">Max no. Guests</h3>
             <input
               type="number"
               value={maxGuests || ''}
               onChange={(e) => setMaxGuests(e.target.value)}
               placeholder="No. of guests"
             />
+          </div>
+
+        <div>
+          <div>
+          <h3 className="mt-2 -mb-1 ml-3">Price</h3>
+            <input
+              type="number"
+              value={price || ''}
+              onChange={(e) => setPrice(e.target.value)}
+              placeholder="$1200"
+            />
+          </div>
           </div>
         </div>
 

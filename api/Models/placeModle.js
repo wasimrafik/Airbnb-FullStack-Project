@@ -40,6 +40,10 @@ const places = new Schema({
         type: Number,
         required: true
     },
+    price:{
+        type: Number,
+        required: true
+    },
     checkOut:{
         type: Number,
         required: true
