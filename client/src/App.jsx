@@ -9,7 +9,8 @@ import { UserContextProvider } from "./component/userContext/UserContext";
 import ProfilePage from "./component/HomePage/user/ProfilePage";
 import Places from "./component/HomePage/places/Places";
 import PlacesFormPage from "./component/HomePage/places/PlacesFormPage";
-import PlaceDetailPage from "./component/HomePage/places/PlaceDetailPage";
+import PlaceDetailPage from "./component/HomePage/PlaceDetailPage";
+
 
 axios.defaults.baseURL = "http://localhost:4000";
 axios.defaults.withCredentials = true;

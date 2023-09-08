@@ -17,7 +17,7 @@ const HomePage = () => {
 
   return (
     <div className="mt-8 grid gap-x-6 gap-y-8 grid-cols-2 md:grid-cols-3 lg:grid-cols-4 object-cover">
-      {places.length > 0 &&
+      {places?.length > 0 &&
         places.map((place, ind) => {
           return (
             <Link to={'/place/'+place._id} key={ind} className=" object-cover">

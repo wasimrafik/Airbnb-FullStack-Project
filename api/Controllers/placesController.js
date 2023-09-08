@@ -240,3 +240,20 @@ export const getAllPlacesForHomePage = async (req, res)=>{
       })
   }
 }
+
+export const getSinglePlacesForHomePage = async (req, res)=>{
+  try {
+      
+    const id = req.params.id;
+
+      const getAllPlaces = await placeModle.findOne({_id: id});
+
+      console.log(getAllPlaces);
+      return res.json({Data: getAllPlaces, Message:"All Places Fetch For Home Sucessfully"})
+
+  } catch (error) {
+      return res.status(500).json({
+          Message: error.Message  
+      })
+  }
+}
