@@ -25,10 +25,10 @@ const Bookings = () => {
       <div>
         {BookingsData.length > 0 && BookingsData.map((booking, ind)=>{
           return (
-            <Link to={`/account/booking/${booking._id}`} key={ind} className="flex gap-4 bg-gray-200  rounded-2xl overflow-hidden">
-              <div className="w-60 h-full">
+            <Link to={`/account/booking/${booking._id}`} key={ind} className="flex gap-4 mb-3 bg-gray-200  rounded-2xl overflow-hidden">
+              <div className="w-60 h-full object-cover">
               {booking.place.photos.length > 0 && (
-              <img className="object-cover " src={'http://localhost:4000/Uploads/places/'+booking.place.photos[0]} alt="photos" />
+              <img className="object-none aspect-square " src={'http://localhost:4000/Uploads/places/'+booking.place.photos[0]} alt="photos" />
               )}
               </div>
               <div className="py-3 pr-3 grow">

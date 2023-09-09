@@ -27,29 +27,10 @@ export const addBookingDetails = async (req, res) =>{
     }
 }
 
-// export const getBookingDetails = async (req, res) => {
-//     try {
-//         const ownerID = req.auth.id;
-        
-//         // Find bookings associated with the ownerID
-//         const getAllBookings = await bookingModle.find({ user: ownerID }).populate('places');
-//         console.log(getAllBookings);
-        
-//         if (getAllBookings.length > 0) {
-//             return res.status(200).json({ Data: getAllBookings, Message: "All Booking Fetch Successfully" });
-//         } else {
-//             return res.status(404).json({ Message: "No bookings found for this user" });
-//         }
-//     } catch (error) {
-//         return res.status(500).json({ Message: error.message });
-//     }
-// }
-
 export const getBookingDetails = async (req, res) => {
     try {
         const ownerID = req.auth.id;
         
-        // Find bookings associated with the ownerID and populate the 'place' field
         const getAllBookings = await bookingModle.find({ user: ownerID }).populate('place');
         
         if (getAllBookings.length > 0) {
@@ -62,6 +43,31 @@ export const getBookingDetails = async (req, res) => {
     }
 }
 
+export const singleBooking = async (req, res) => {
+    try {
+        // const ownerID = req.auth.id;
+        
+        // const getAllBookings = await bookingModle.find({ user: ownerID }).populate('place');
+        
+        // if (getAllBookings.length > 0) {
+        //     return res.status(200).json({ Data: getAllBookings, Message: "All Booking Fetch Successfully" });
+        // } else {
+        //     return res.status(404).json({ Message: "No bookings found for this user" });
+        // }
+
+        const id = req.params.id;
+
+        const getBooking = await bookingModle.findOne({_id: id})
+
+        if(getBooking.length > 0){
+            return res.status(200).json({Data: getBooking, Message: "Single Booking Fetch Sucessfully"})
+        }
+
+
+    } catch (error) {
+        return res.status(500).json({ Message: error.message });
+    }
+}
 
 
 
