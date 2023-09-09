@@ -5,6 +5,7 @@ const bcrypt = require("bcrypt");
 import cookieParser from 'cookie-parser'
 import  userRouter from './Router/UserRouter';
 import placeRouter from './Router/placeRouter';
+import bookingRouter from './Router/bookingRouter';
 
 
 
@@ -31,3 +32,4 @@ mongoose
 
 app.use('/user', userRouter);
 app.use('/place', placeRouter);
+app.use('/booking', bookingRouter)
